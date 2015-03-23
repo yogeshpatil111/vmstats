@@ -1,0 +1,39 @@
+$ ./simulate -c 100 -r 10
+Creating 100 VMs processes. You can check using 'pgrep fake-qemu-kvm'
+Creating host channels. You can check using 'ps -elf | grep host-listner'
+
+$ ./vm-check -c 2 -i 10
+Iteration : 1
+Iteration : 2
+
+Processing collected data...
+VM ID : nk2xk2nr is unused for a while. Avgs Percents:: CPU: 7.95, Mem: 9.22, Disk: 9.483597
+VM ID : 5b8b6hlu is unused for a while. Avgs Percents:: CPU: 6.35, Mem: 6.94, Disk: 7.662699
+VM ID : ewpkxzzy is unused for a while. Avgs Percents:: CPU: 6.94, Mem: 7.05, Disk: 7.209550
+VM ID : c4h0a27k is unused for a while. Avgs Percents:: CPU: 7.48, Mem: 8.09, Disk: 8.761931
+VM ID : u1ku3kjj is unused for a while. Avgs Percents:: CPU: 7.46, Mem: 9.24, Disk: 8.956198
+VM ID : j90yvhdb is unused for a while. Avgs Percents:: CPU: 8.63, Mem: 8.88, Disk: 9.178427
+VM ID : lyq76rez is unused for a while. Avgs Percents:: CPU: 6.40, Mem: 7.46, Disk: 7.653566
+VM ID : 5egoqvre is unused for a while. Avgs Percents:: CPU: 8.64, Mem: 8.86, Disk: 9.729055
+VM ID : s1dtbjxh is unused for a while. Avgs Percents:: CPU: 7.19, Mem: 9.08, Disk: 8.239371
+VM ID : p2ffrivj is unused for a while. Avgs Percents:: CPU: 8.26, Mem: 8.35, Disk: 8.495070
+VM ID : 2yuc54o4 is unused for a while. Avgs Percents:: CPU: 8.66, Mem: 10.71, Disk: 9.307901
+VM ID : iozyx2p9 is unused for a while. Avgs Percents:: CPU: 5.64, Mem: 7.20, Disk: 6.569059
+VM ID : 6l1mduf1 is unused for a while. Avgs Percents:: CPU: 9.21, Mem: 10.94, Disk: 9.681924
+VM ID : 1psgmjr2 is unused for a while. Avgs Percents:: CPU: 6.92, Mem: 7.88, Disk: 7.026014
+VM ID : kaalhi4v is unused for a while. Avgs Percents:: CPU: 8.05, Mem: 8.46, Disk: 9.521377
+VM ID : ec35gyal is unused for a while. Avgs Percents:: CPU: 6.22, Mem: 7.49, Disk: 7.505603
+VM ID : qx5gnp0b is unused for a while. Avgs Percents:: CPU: 5.16, Mem: 6.48, Disk: 7.155755
+VM ID : 6dbyyc6m is unused for a while. Avgs Percents:: CPU: 7.14, Mem: 8.51, Disk: 8.469455
+VM ID : 3fakdbxx is unused for a while. Avgs Percents:: CPU: 6.57, Mem: 7.31, Disk: 8.073373
+VM ID : rc7kauga is unused for a while. Avgs Percents:: CPU: 6.11, Mem: 7.12, Disk: 7.204167
+VM ID : tvky8f9v is unused for a while. Avgs Percents:: CPU: 7.00, Mem: 7.80, Disk: 8.951749
+VM ID : rj28d1c3 is unused for a while. Avgs Percents:: CPU: 5.96, Mem: 6.48, Disk: 7.375316
+VM ID : 1ubolipl is unused for a while. Avgs Percents:: CPU: 7.05, Mem: 8.32, Disk: 7.434464
+VM ID : c3jmthup is unused for a while. Avgs Percents:: CPU: 7.08, Mem: 7.53, Disk: 7.869487
+VM ID : sve6ql9h is unused for a while. Avgs Percents:: CPU: 9.40, Mem: 10.37, Disk: 9.924430
+VM ID : aylrg5m4 is unused for a while. Avgs Percents:: CPU: 8.22, Mem: 9.15, Disk: 9.496794
+VM ID : au89aoiz is unused for a while. Avgs Percents:: CPU: 5.31, Mem: 6.25, Disk: 6.165831
+VM ID : k81c7a9l is unused for a while. Avgs Percents:: CPU: 8.43, Mem: 9.35, Disk: 9.936486
+VM ID : q9i3fhfr is unused for a while. Avgs Percents:: CPU: 6.81, Mem: 9.21, Disk: 9.322358
+VM ID : r5oq9li4 is unused for a while. Avgs Percents:: CPU: 9.20, Mem: 9.81, Disk: 8.550930
