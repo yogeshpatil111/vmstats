@@ -97,10 +97,12 @@ def main():
     
     execution_count = 0
     while(execution_count < iterations):
+        print "Iteration : "+str(execution_count+1)
         channel.publishMessage('sendStats')
         time.sleep(interval)
         execution_count += 1
 
+    print "\nProcessing collected data..."
     processdata()
     channel.publishMessage('stop')
     
