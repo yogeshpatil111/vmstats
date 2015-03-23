@@ -1,6 +1,7 @@
 from pymongo import MongoClient
+import ConfigParser
+import os
 
-database_url = 'mongodb://localhost:27017/test'
 collection_name = "vmstats"
 
 """
@@ -12,7 +13,18 @@ class DB:
     Constructor : Accepts collection input for communocating with different collections in the DB.
     """
     def __init__(self,collection="vmstats"):
-        self.client = MongoClient(database_url)
+        self.config_path = "vm.config"
+        self.database_url = 'mongodb://localhost:27017/test'
+        if os.path.exists(self.config_path):
+            config = ConfigParser.ConfigParser()
+            config.read(self.config_path)
+            
+            if config.has_section("db"):
+                for option in config.options("db"):
+                    if "url" == option:
+                        self.database_url = config.get("db", "url")
+        
+        self.client = MongoClient(self.database_url)
         self.db = self.client.get_default_database()
         if collection:
             if collection_name not in self.db.collection_names():

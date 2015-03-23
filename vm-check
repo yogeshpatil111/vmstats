@@ -65,7 +65,9 @@ def process_vm_data(vmid):
     if cpu_util_avg < low_cpu_util and \
        memory_util_avg < low_memory_util and \
        disk_util_avg < low_disk_util:
-        print "VM ID : " + vmid + " is unused for a while"
+        utilstring = "CPU: %.2f, Mem: %.2f, Disk: %2f" % (cpu_util_avg, memory_util_avg, disk_util_avg)
+        print "VM ID : " + vmid + " is unused for a while. Avgs Percents:: " + utilstring
+              
 
 
 def processdata():

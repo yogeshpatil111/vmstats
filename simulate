@@ -40,7 +40,9 @@ def main(argv):
     #This will work fine with vmcount % hvmratio = 0. Other condition needs to be handled.    
     hypervisor = int(vmcount/hvmratio)
 
-    ## Create VMs and VM DBs    
+    ## Create VMs and VM DBs
+    print "Creating " + str(vmcount) +" VMs processes. You can check using 'pgrep fake-qemu-kvm'"
+        
     for i in xrange(hypervisor):
         for j in xrange(hvmratio):
             vmid = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
@@ -62,6 +64,7 @@ def main(argv):
     db.store(vmlist)
     time.sleep(1)
 
+    print "Creating host channels. You can check using 'ps -elf | grep host-listner'"
     ## Start hypervisor comminucation channels
     for i in xrange(hypervisor):
         channel.subscribeChannel("hypervisor_"+str(i))

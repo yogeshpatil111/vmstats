@@ -5,7 +5,10 @@ import base64
 import json
 import sys
 import time
+import os
+import ConfigParser
 
+config_path="vm.config"
 host = "localhost"
 host_url = host+":15672"
 username = "guest"
@@ -20,6 +23,28 @@ class DataException(Exception):
         self.value = value
     def __str__(self):
         return repr(self.value)
+
+def get_config():
+    global channel_host
+    global username
+    global password
+    global auth
+    global headers
+    
+    if os.path.exists(config_path):
+        config = ConfigParser.ConfigParser()
+        config.read(config_path)
+        
+        if config.has_section("channel"):
+            for option in config.options("channel"):
+                if "host" == option:
+                    channel_host = config.get("channel", "host")
+                if "username" == option:
+                    username = config.get("channel", "username")
+                if "password" == option:
+                    username = config.get("channel", "password")
+        auth = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+        headers = {"Authorization": "Basic %s" % auth }
 
 
 def call_rabbit(url):    
@@ -54,18 +79,19 @@ def main(argv):
         
         channel = connection.channel()
         
-        print "Purging all Qs starting with name : " + startswith
+        print "Purging and deleting all Qs starting with name : " + startswith
         data = call_rabbit(queue_stat_url)
         qlist = []
         if 0 != len(data):        
             for queue in data:
                 if queue["name"].startswith(startswith):
-                    print "Purging " + queue["name"] + " from vHOST : " + queue["vhost"] + " ..."
+                    print "Purging and deleting " + queue["name"] + " from vHOST : " + queue["vhost"] + " ..."
                     channel.queue_purge(queue=queue["name"])
                     channel.queue_delete(queue=queue["name"])
 
         connection.close()
 
 if __name__ == "__main__":
+    get_config()
     main(sys.argv)
     
