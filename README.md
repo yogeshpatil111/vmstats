@@ -4,12 +4,17 @@
 
 ### On Ubuntu install following dependencies
 
-sudo apt-get update ;
-sudo apt-get install rabbitmq ;
-sudo apt-get install -y mongodb ;
-sudo rabbitmq-plugins enable rabbitmq_management ;
-sudo easy_install pika ; 
-sudo easy_install pymongo ;
+sudo apt-get update
+
+sudo apt-get install rabbitmq
+
+sudo apt-get install -y mongodb
+
+sudo rabbitmq-plugins enable rabbitmq_management
+
+sudo easy_install pika
+
+sudo easy_install pymongo
 
 ### For other machines, please follow instructions from,
 ### https://www.rabbitmq.com/download.html
