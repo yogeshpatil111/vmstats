@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+import pika
+import httplib
+import base64
+import json
+import sys
+import time
+
+host = "localhost"
+host_url = host+":15672"
+username = "guest"
+password = "guest"
+queue_stat_url = "/api/queues"
+# base64 encode the username and password
+auth = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
+headers = {"Authorization": "Basic %s" % auth }
+
+class DataException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+
+def call_rabbit(url):    
+    rabbit_connect = httplib.HTTPConnection(host_url)
+    rabbit_connect.request("GET", url,headers=headers)
+    res = rabbit_connect.getresponse()
+    
+    if 200 == res.status:
+        data = json.loads(res.read())
+        return data
+    else:
+        exception_string = "HTTP Error: Status Code: %s " % str(res.status)
+        exception_string = exception_string + ", Error String: %s." % str(res.reason)
+        raise DataException(exception_string)
+
+def main(argv):
+    global host
+    global host_url
+    if len(argv) > 1:        
+        startswith = argv[1]
+        vhost = None
+        if len(argv) > 2:
+            vhost = argv[2]
+        if len(argv) > 3:
+            print "Connecting to host " + argv[3] + " ..."
+            host = argv[3]
+            host_url = host+":15672"
+        
+        credentials = pika.PlainCredentials(username, password)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(
+               host,virtual_host=vhost,credentials=credentials))
+        
+        channel = connection.channel()
+        
+        print "Purging all Qs starting with name : " + startswith
+        data = call_rabbit(queue_stat_url)
+        qlist = []
+        if 0 != len(data):        
+            for queue in data:
+                if queue["name"].startswith(startswith):
+                    print "Purging " + queue["name"] + " from vHOST : " + queue["vhost"] + " ..."
+                    channel.queue_purge(queue=queue["name"])
+                    channel.queue_delete(queue=queue["name"])
+
+        connection.close()
+
+if __name__ == "__main__":
+    main(sys.argv)
+    

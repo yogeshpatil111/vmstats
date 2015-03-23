@@ -1,0 +1,107 @@
+#!/usr/bin/env python
+
+import time
+import os
+import ConfigParser
+import datetime
+import random
+import sys
+import channel
+from db import DB
+from optparse import OptionParser
+
+config_path = "vm.config"
+
+low_cpu_util=10
+low_memory_util=20
+low_disk_util=10
+
+vm_list = []
+
+
+mondb = DB(collection="monitor")
+
+def get_vm_list():
+    global vm_list
+    db = DB()
+    
+    cur = db.retrieve()
+    for item in cur:
+        vm_list.append(item['_id'])
+
+def get_config():
+    global low_cpu_util
+    global low_memory_util
+    global low_disk_util
+    
+    if os.path.exists(config_path):
+        config = ConfigParser.ConfigParser()
+        config.read(config_path)
+        
+        if config.has_section("underutilized"):
+            for option in config.options("underutilized"):
+                if "cpu" == option:
+                    low_cpu_util = config.getfloat("underutilized", "cpu")
+                if "memory" == option:
+                    low_memory_util = config.getfloat("underutilized", "memory")
+                if "disk" == option:
+                    low_disk_util = config.getfloat("underutilized", "disk")
+
+def process_vm_data(vmid):
+    cur = mondb.retrieve({'vmid':vmid})
+    count = cur.count()
+    cpu_util = 0
+    memory_util = 0
+    disk_util = 0
+    for item in cur:
+        cpu_util += item['cpuutil']
+        memory_util += item['memutil']
+        disk_util += item['diskutil']
+
+    cpu_util_avg = cpu_util / count
+    memory_util_avg = memory_util / count
+    disk_util_avg = disk_util / count
+
+    if cpu_util_avg < low_cpu_util and \
+       memory_util_avg < low_memory_util and \
+       disk_util_avg < low_disk_util:
+        print "VM ID : " + vmid + " is unused for a while"
+
+
+def processdata():
+    for vmid in vm_list:
+        process_vm_data(vmid)
+    
+
+def main():
+    st = datetime.datetime.fromtimestamp(time.time()).strftime('%Y_%m_%d_%H_%M_%S')
+    parser = OptionParser(usage="usage: %prog --iterations <count> [options]")
+    parser.add_option("-c", "--iterations", action="store", dest="iterations",type="int",
+                      help="Number of samples to collect for VM stats")
+    parser.add_option("-i", "--iterval", action="store", dest="interval",
+                      default=60,type="int",help="Sampling time for collecting VM stats in Seconds. Default 60")
+
+    (options, args) = parser.parse_args()
+
+    if not options.iterations:
+        print "itercation count is mandatory"
+        parser.print_help()
+        exit(-1)
+
+    get_vm_list()
+
+    iterations = options.iterations
+    interval = options.interval
+    
+    execution_count = 0
+    while(execution_count < iterations):
+        channel.publishMessage('sendStats')
+        time.sleep(interval)
+        execution_count += 1
+
+    processdata()
+    channel.publishMessage('stop')
+    
+
+if __name__ == "__main__":
+    main()
