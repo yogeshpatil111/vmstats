@@ -46,7 +46,7 @@ This excercise will create lots of processes for VM simulator and hypervisor com
 ### Mongo data can be seen using,
 
 ###mongo
-###> db.montior.find()
+###> db.monitor.find()
 
 ### Clean up: please run following command to remove all fake VMs.
 
